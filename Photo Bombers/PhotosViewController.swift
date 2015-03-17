@@ -20,18 +20,20 @@ class PhotosViewController: UICollectionViewController {
     
     override init() {
         var layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSizeMake(106.0, 106.0)
-        layout.minimumInteritemSpacing = 1.0
-        layout.minimumLineSpacing = 1.0
         
         super.init(collectionViewLayout: layout)
+        
+        //This has to be called AFTER super so we can get the view initialized
+        layout.itemSize = CGSizeMake( (view.frame.width-2)/3, (view.frame.width-2)/3)
+        layout.minimumInteritemSpacing = 1.0
+        layout.minimumLineSpacing = 1.0
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Register cell classes
-        self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "photo")
+        self.collectionView!.registerClass(PhotoCell.self, forCellWithReuseIdentifier: "photo")
         
         self.title = "Photo Bombers"
         self.collectionView?.backgroundColor = UIColor.whiteColor()
