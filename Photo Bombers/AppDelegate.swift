@@ -17,13 +17,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
-        let photosViewController = PhotosViewController()
+        
+        let instagramAuthDictionary: [String:String] = ["client_id" : "e9c21e63a7374d009d391c0ac7b2d2c2", SimpleAuthRedirectURIKey : "photobombers://auth/instagram"]
+        
+        
+        SimpleAuth.configuration()["instagram"] = instagramAuthDictionary
+        
+//        SimpleAuth.configuration[@"instagram"] = @{
+//            @"client_id" : @"CLIENT_ID",
+//            SimpleAuthRedirectURIKey : @"https://mysite.com/auth/instagram/callback"
+//        };
+       // [SimpleAuth authorize:@"instagram" completion:^(id responseObject, NSError *error) {}];
+        
+        var photosViewController = PhotosViewController()
         
         //create the root navigation controller and pass it the photosViewController as the initial screen
-        let navigationController = UINavigationController(rootViewController: photosViewController)
+        var navigationController = UINavigationController(rootViewController: photosViewController)
         
         //create and customize the navigation bar which is part of the navigationController
-        let navigationBar = navigationController.navigationBar
+        var navigationBar = navigationController.navigationBar
         navigationBar.barTintColor = UIColor(red: 242/255.0, green: 122/255.0, blue: 87/255.0, alpha: 1.0)
         navigationBar.barStyle = UIBarStyle.Black
         navigationBar.translucent = true //this defaults to true, but still a good idea to implement.  "false" appears to create a background that matches the barTintColor
