@@ -10,7 +10,7 @@ import UIKit
 
 let reuseIdentifier = "Cell"
 
-class PhotosViewController: UICollectionViewController {
+class PhotosViewController: UICollectionViewController, UIViewControllerTransitioningDelegate {
 
     
     var accessToken: String = ""
@@ -114,39 +114,23 @@ class PhotosViewController: UICollectionViewController {
     }
 
     // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
-        return false
-    }
-
-    override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
     
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        var photo = self.photos[indexPath.row] as NSDictionary
+        var viewController = DetailViewController()
+        //set the viewController to use a custom transition.  Be sure to implement the UIViewControllerTransitioningDelegate protocol
+        viewController.modalPresentationStyle = UIModalPresentationStyle.Custom
+        viewController.transitioningDelegate = self //this is why we need to implement the UIViewControllerTransitioningDelegate protocol
+        viewController.photo = photo
+        
+        self.presentViewController(viewController, animated: true, completion: nil)
     }
-    */
+    
+    //MARK: - helper methods
     
     func refresh() {
         var session = NSURLSession.sharedSession()
-        var urlString: String = "https://api.instagram.com/v1/tags/snow/media/recent?access_token=\(self.accessToken)"
+        var urlString: String = "https://api.instagram.com/v1/tags/wcw/media/recent?access_token=\(self.accessToken)"
         var url = NSURL(string: urlString)
         var request = NSURLRequest(URL: url!)
         
@@ -167,6 +151,16 @@ class PhotosViewController: UICollectionViewController {
             
         })
         task.resume()
+    }
+    
+    //MARK: - UIViewControllerTransitioningDelegate
+    
+    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return PresentDetailTransition()
+    }
+    
+    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return DismissDetailTransition()
     }
 
 }

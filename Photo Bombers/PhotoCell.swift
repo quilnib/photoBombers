@@ -41,37 +41,12 @@ class PhotoCell: UICollectionViewCell {
         
         self.photo = photoDictionary
         
-        var photoUrlString = photoDictionary.valueForKeyPath("images.thumbnail.url") as String
-        var url = NSURL(string: photoUrlString)
-        self.downloadPhotoWithURL(url!)
-    }
-    
-    func downloadPhotoWithURL(url: NSURL) {
-        
-        //generate a reuseable key for each photo to be used for cacheing
-        var key = (self.photo!["id"] as String) + "-thumbnail"
-        var photo: UIImage? = SAMCache.sharedCache().imageForKey(key) //the : UIImage needs to be set to Optional so we can do a != nil check in the next step
-        
-        //if the photo is cached, then we do not need to request it again
-        if (photo != nil) {
-            self.imageView?.image = photo
-            return
+        PhotoController.imageForPhoto(self.photo!, size: "thumbnail") { (image) -> Void in
+            self.imageView!.image = image
         }
         
-        let session = NSURLSession.sharedSession()
-        let request = NSURLRequest(URL: url)
-        var task = session.downloadTaskWithRequest(request, completionHandler: { (location: NSURL!, response: NSURLResponse!, error: NSError!) -> Void in
-            
-            var data = NSData(contentsOfURL: location) //going from data to image instead of NSURL to image avoids a lot of problems
-            var image = UIImage(data: data!)
-            SAMCache.sharedCache().setImage(image, forKey: key)
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.imageView!.image = image
-            })
-        })
-        task.resume()
     }
+    
     
     func like() {
         
