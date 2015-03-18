@@ -6,3 +6,5 @@
 #import <Foundation/Foundation.h>
 
 #import <SimpleAuth/SimpleAuth.h>
+
+#import <SAMCache/SAMCache.h>

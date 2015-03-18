@@ -9,6 +9,7 @@ PODS:
   - ReactiveCocoa/no-arc (2.4.7)
   - ReactiveCocoa/UI (2.4.7):
     - ReactiveCocoa/Core
+  - SAMCache (0.3.0)
   - SimpleAuth/Core (0.3.6):
     - CMDQueryStringSerialization
     - ReactiveCocoa
@@ -19,12 +20,14 @@ PODS:
     - SimpleAuth/Core
 
 DEPENDENCIES:
+  - SAMCache
   - SimpleAuth/Instagram
 
 SPEC CHECKSUMS:
   CMDQueryStringSerialization: bc824b96c08a3277d00c71504e13c9fa18c6b451
   ISO8601: 92c818ffadac96b0bee76a7ee69dfb617acea197
   ReactiveCocoa: 313fc53cc9aeb2bbbc3f5f13c7eac16478d9af8f
+  SAMCache: ab96161f1938a85b0fd426958fc7f36e29a9fe27
   SimpleAuth: 0664e22bff27c7f5b169254b421b1c761d002f65
 
 COCOAPODS: 0.35.0

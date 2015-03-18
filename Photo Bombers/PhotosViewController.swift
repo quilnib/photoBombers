@@ -51,15 +51,17 @@ class PhotosViewController: UICollectionViewController {
         //self.accessToken = userDefaults.objectForKey("accessToken") as String
         
         if (self.accessToken.isEmpty) {
-            SimpleAuth.authorize("instagram", completion: { (responseObject: AnyObject!, error: NSError!) -> Void in
+            SimpleAuth.authorize("instagram", options: ["scope": ["likes"]],completion: { (responseObject: AnyObject!, error: NSError!) -> Void in
                 //println("response \(responseObject)")
                 
                 if let responseDictionary = responseObject! as? Dictionary <String , AnyObject>
                 {
-                    let accessToken: String = responseDictionary["credentials"]!["token"]! as String
+                    self.accessToken = responseDictionary["credentials"]!["token"]! as String
                     
-                    userDefaults.setObject(accessToken, forKey: "accessToken")
+                    userDefaults.setObject(self.accessToken, forKey: "accessToken")
                     userDefaults.synchronize()
+                    
+                    self.refresh()//reload the view after we sign in
                 }
             })
         } else {
@@ -106,8 +108,8 @@ class PhotosViewController: UICollectionViewController {
         // Configure the cell
     
         cell.backgroundColor = UIColor.lightGrayColor()
-        //cell.setPhoto(self.photos[indexPath.row] as NSDictionary)
-        cell.photo = (self.photos[indexPath.row] as NSDictionary)
+        cell.setPhoto(self.photos[indexPath.row] as NSDictionary)
+        //cell.photo = (self.photos[indexPath.row] as NSDictionary)
         return cell
     }
 
@@ -153,7 +155,7 @@ class PhotosViewController: UICollectionViewController {
             var data = NSData(contentsOfURL: location)
             var responseDictionary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: nil) as NSDictionary
             
-            println("text: \(responseDictionary)")
+            //println("text: \(responseDictionary)")
             
             self.photos = responseDictionary.valueForKeyPath("data") as [AnyObject]
             
